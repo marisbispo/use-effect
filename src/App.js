@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Produto from './Produto';
 
-function App() {
+// Quando o usuário clicar em um dos botões, faça um fetch do produto clicado utilizando a api abaixo
+// https://ranekapi.origamid.dev/json/api/produto/notebook
+// https://ranekapi.origamid.dev/json/api/produto/smartphone
+// Mostre o nome e preço na tela (separe essa informação em um componente Produto.js)
+// Defina o produto clicado como uma preferência do usuário no localStorage
+// Quando o usuário entrar no site, se existe um produto no localStorage, faça o fetch do mesmo
+
+const App = () => {
+  const [produtos, setProdutos] = React.useState(null);
+
+  React.useEffect(() => {
+    if (produtos !== null) window.localStorage.setItem('produto', produtos);
+  }, [produtos]);
+
+  React.useEffect(() => {
+    const localProdutos = window.localStorage.getItem('produto');
+    if (localProdutos !== null) setProdutos(localProdutos);
+  });
+
+  function handleClick({ target }) {
+    setProdutos(target.innerText);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <p>preferencia: {produtos} </p>
+      <button onClick={handleClick}>notebook</button>
+      <button onClick={handleClick}>smartphone</button>
+      <Produto produto={produtos} />
     </div>
   );
-}
+};
 
 export default App;
